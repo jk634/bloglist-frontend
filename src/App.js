@@ -1,19 +1,19 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Blog from './components/Blog';
 import blogService from './services/blogs';
 import loginService from './services/login';
 import NewBlog from './components/NewBlog';
 import Notification from './components/Notification';
+import Togglable from './components/Togglable';
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null);
-  const [author, setAuthor] = useState('');
-  const [title, setTitle] = useState('');
-  const [url, setUrl] = useState('');
   const [message, setMessage] = useState(null);
+
+  const newBlogRef = useRef();
 
   useEffect(() => {
     blogService.getAll().then((blogs) => {
@@ -28,10 +28,6 @@ const App = () => {
       setUser(user);
     }
   }, []);
-
-  const handleAuthorChange = (event) => setAuthor(event.target.value);
-  const handleTitleChange = (event) => setTitle(event.target.value);
-  const handleUrlChange = (event) => setUrl(event.target.value);
 
   const notify = (msg) => {
     console.log(msg);
@@ -57,26 +53,15 @@ const App = () => {
       setPassword('');
       notify('Logged in');
     } catch (exception) {
-      console.log();
       notify(exception.response.data.error);
     }
   };
 
-  const handleNewBlog = async (event) => {
-    event.preventDefault();
-
+  const addBlog = async (blogObject) => {
     try {
-      const newBlog = {
-        title: title,
-        author: author,
-        url: url,
-      };
-      const response = await blogService.create(newBlog);
-      setTitle('');
-      setAuthor('');
-      setUrl('');
+      newBlogRef.current.toggleVisibility();
+      const response = await blogService.create(blogObject);
       setBlogs(blogs.concat(response));
-      console.log(response.title);
       notify(`a new blog ${response.title} by ${response.author} added`);
     } catch (exception) {
       notify(exception.response.data.error);
@@ -125,15 +110,10 @@ const App = () => {
       <Notification message={message} />
       <p style={{ display: 'inline' }}>{user.name} logged in</p>
       <button onClick={handleClickLogout}>logout</button>
-      <NewBlog
-        handleNewBlog={handleNewBlog}
-        handleAuthorChange={handleAuthorChange}
-        handleTitleChange={handleTitleChange}
-        handleUrlChange={handleUrlChange}
-        author={author}
-        title={title}
-        url={url}
-      />
+      <Togglable buttonLabel='create new blog' ref={newBlogRef}>
+        <NewBlog createBlog={addBlog} />
+      </Togglable>
+
       {blogs.map((blog) => (
         <Blog key={blog.id} blog={blog} />
       ))}
