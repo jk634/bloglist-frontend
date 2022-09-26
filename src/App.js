@@ -17,7 +17,8 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then((blogs) => {
-      setBlogs(blogs);
+      const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes);
+      setBlogs(sortedBlogs);
     });
   }, []);
 
@@ -61,6 +62,17 @@ const App = () => {
     try {
       const response = await blogService.update(id, blogObject);
       setBlogs(blogs.map((blog) => (blog.id !== id ? blog : response)));
+    } catch (exception) {
+      notify(exception.response.data.error);
+    }
+  };
+
+  const removeBlog = async (blog) => {
+    try {
+      if (window.confirm(`remove blog ${blog.title} by ${blog.author}`)) {
+        await blogService.remove(blog.id);
+        setBlogs(blogs.filter((b) => b.id !== blog.id));
+      }
     } catch (exception) {
       notify(exception.response.data.error);
     }
@@ -124,7 +136,13 @@ const App = () => {
       </Togglable>
 
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} modifyBlog={updateBlog} />
+        <Blog
+          key={blog.id}
+          blog={blog}
+          modifyBlog={updateBlog}
+          removeBlog={removeBlog}
+          user={user}
+        />
       ))}
     </div>
   );

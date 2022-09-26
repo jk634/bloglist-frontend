@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const Blog = ({ blog, buttonLabel, modifyBlog }) => {
+const Blog = ({ blog, buttonLabel, modifyBlog, removeBlog, user }) => {
   const [visible, setVisible] = useState(false);
 
   const blogStyle = {
@@ -11,8 +11,18 @@ const Blog = ({ blog, buttonLabel, modifyBlog }) => {
     marginBottom: 5,
   };
 
+  const removeButtonStyle = {
+    backgroundColor: 'blue',
+    color: 'white',
+    borderRadius: '5px',
+  };
+
   const handleClickBlogView = () => {
     setVisible(!visible);
+  };
+
+  const handleClickRemove = () => {
+    removeBlog(blog);
   };
 
   const handleClickLike = () => {
@@ -24,8 +34,6 @@ const Blog = ({ blog, buttonLabel, modifyBlog }) => {
       url: blog.url,
     });
   };
-
-  console.log(blog);
 
   return (
     <div style={blogStyle}>
@@ -42,6 +50,16 @@ const Blog = ({ blog, buttonLabel, modifyBlog }) => {
             likes {blog.likes} <button onClick={handleClickLike}>like</button>
             <br />
             {blog.user.name}
+            {user.name === blog.user.name ? (
+              <>
+                <br />
+                <button style={removeButtonStyle} onClick={handleClickRemove}>
+                  remove
+                </button>
+              </>
+            ) : (
+              <></>
+            )}
           </>
         )}
       </div>
