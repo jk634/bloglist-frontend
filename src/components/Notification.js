@@ -1,4 +1,4 @@
-const Notification = ({ message, msgStyle }) => {
+const Notification = ({ message }) => {
   if (message === null) {
     return null;
   }

@@ -32,6 +32,7 @@ const NewBlog = ({ createBlog }) => {
             type='text'
             value={title}
             name='title'
+            id='title'
             onChange={handleTitleChange}
           />
         </div>
@@ -41,6 +42,7 @@ const NewBlog = ({ createBlog }) => {
             type='text'
             value={author}
             name='author'
+            id='author'
             onChange={handleAuthorChange}
           />
         </div>
@@ -50,10 +52,13 @@ const NewBlog = ({ createBlog }) => {
             type='text'
             value={url}
             name='url'
+            id='url'
             onChange={handleUrlChange}
           />
         </div>
-        <button type='submit'>create</button>
+        <button type='submit' id='create'>
+          create
+        </button>
       </form>
     </>
   );
