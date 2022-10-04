@@ -30,5 +30,22 @@ describe('Blog app', function () {
       cy.get('#loginButton').click();
       cy.get('.error').should('contain', 'invalid username or password');
     });
+
+    describe('When logged in', function () {
+      beforeEach(function () {
+        cy.get('#username').type('tite');
+        cy.get('#password').type('salasana');
+        cy.get('#loginButton').click();
+      });
+
+      it('A blog can be created', function () {
+        cy.contains('create new blog').click();
+        cy.get('#title').type('A new blog');
+        cy.get('#author').type('Toni Oksanen');
+        cy.get('#url').type('www.testi.fi');
+        cy.get('#create').click();
+        cy.contains('A new blog Toni Oksanen');
+      });
+    });
   });
 });
