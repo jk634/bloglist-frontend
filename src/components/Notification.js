@@ -5,6 +5,7 @@ const Notification = ({ message }) => {
 
   return (
     <div
+      className='error'
       style={{
         padding: '10px 20px',
         border: 'solid',
