@@ -54,11 +54,15 @@ const Blog = ({ blog, modifyBlog, removeBlog, user }) => {
               like
             </button>
             <br />
-            {blog.user.name}
+            <div id='creator'>{blog.user.name}</div>
             {user.name === blog.user.name ? (
               <>
                 <br />
-                <button style={removeButtonStyle} onClick={handleClickRemove}>
+                <button
+                  id='removeButton'
+                  style={removeButtonStyle}
+                  onClick={handleClickRemove}
+                >
                   remove
                 </button>
               </>

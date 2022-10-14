@@ -70,6 +70,15 @@ describe('Blog app', function () {
           cy.get('#likeButton').click();
           cy.contains(1);
         });
+
+        it('A blog can be deleted', function () {
+          cy.contains('Timo Testaaja logged in');
+          cy.get('#viewButton').click();
+          cy.get('#creator').contains('Timo Testaaja');
+          cy.get('#removeButton').click();
+          cy.visit('http://localhost:3000');
+          cy.contains('A new blog Toni Oksanen').should('not.exist');
+        });
       });
     });
   });
