@@ -79,6 +79,28 @@ describe('Blog app', function () {
           cy.visit('http://localhost:3000');
           cy.contains('A new blog Toni Oksanen').should('not.exist');
         });
+
+        describe('When second blog has been created', function () {
+          beforeEach(function () {
+            cy.createBlog({
+              title: 'A second blog',
+              author: 'Timo Viljanen',
+              url: 'www.toinentesti.fi',
+            });
+          });
+
+          it('Likes are sorted from most to least', function () {
+            cy.get('.blog').eq(0).should('contain', 'A new blog');
+            cy.get('.blog').eq(1).should('contain', 'A second blog');
+            cy.contains('A second blog')
+              .contains('view')
+              .click()
+              .get('#likeButton')
+              .click();
+            cy.visit('http://localhost:3000');
+            cy.get('.blog').eq(0).should('contain', 'A second blog');
+          });
+        });
       });
     });
   });
