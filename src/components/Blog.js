@@ -40,14 +40,19 @@ const Blog = ({ blog, modifyBlog, removeBlog, user }) => {
       <div className='blog'>
         {blog.title} {blog.author}
         {!visible ? (
-          <button onClick={handleClickBlogView}>view</button>
+          <button id='viewButton' onClick={handleClickBlogView}>
+            view
+          </button>
         ) : (
           <>
             <button onClick={handleClickBlogView}>hide</button>
             <br />
             {blog.url}
             <br />
-            likes {blog.likes} <button onClick={handleClickLike}>like</button>
+            likes {blog.likes}{' '}
+            <button id='likeButton' onClick={handleClickLike}>
+              like
+            </button>
             <br />
             {blog.user.name}
             {user.name === blog.user.name ? (

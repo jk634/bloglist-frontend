@@ -31,7 +31,7 @@ describe('Blog app', function () {
       cy.get('.error').should('contain', 'invalid username or password');
     });
 
-    describe('When logged in', function () {
+    describe('When logged in (only blog add)', function () {
       beforeEach(function () {
         cy.get('#username').type('tite');
         cy.get('#password').type('salasana');
@@ -44,7 +44,32 @@ describe('Blog app', function () {
         cy.get('#author').type('Toni Oksanen');
         cy.get('#url').type('www.testi.fi');
         cy.get('#create').click();
+
         cy.contains('A new blog Toni Oksanen');
+      });
+    });
+
+    describe('When logged in', function () {
+      beforeEach(function () {
+        cy.login({ username: 'tite', password: 'salasana' });
+      });
+
+      describe('When blog has been created', function () {
+        beforeEach(function () {
+          cy.createBlog({
+            title: 'A new blog',
+            author: 'Toni Oksanen',
+            url: 'www.testi.fi',
+          });
+        });
+
+        it('A blog can be liked', function () {
+          cy.get('#viewButton').click();
+          cy.contains('A new blog');
+          cy.contains(0);
+          cy.get('#likeButton').click();
+          cy.contains(1);
+        });
       });
     });
   });
